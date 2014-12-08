@@ -31,7 +31,15 @@ train.probe=train[train[,43]=="probe.",]
 train.dos=train[train[,43]=="dos.",]
 train.normal=train[train[,43]=="normal.",]
 
+#
+library(leaps)
+u2r=train.u2r[,-43]
+regfit.best=regsubsets(status~.,data=u2r,nvmax=41,really.big=T)
 
+
+
+
+                      
 
 
 
