@@ -4,7 +4,8 @@ train=read.csv("~/R/kdd99/kddcup.data_10_percent_corrected",header=FALSE)
 header=read.csv("~/R/kdd99/colnames",header=FALSE)
 names(train)=header[,1]
 names(train)[42]="status"
-//train["category"]=c(NA)
+colnames(train)[43]="category"
+
 
 #Assign 23 status into 4 attack category
 
@@ -29,6 +30,8 @@ train.r21=train[train[,43]=="r21.",]
 train.probe=train[train[,43]=="probe.",]
 train.dos=train[train[,43]=="dos.",]
 train.normal=train[train[,43]=="normal.",]
+
+
 
 
 
