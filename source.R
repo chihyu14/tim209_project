@@ -6,7 +6,7 @@ names(train)=header[,1]
 names(train)[42]="status"
 //train["category"]=c(NA)
 
-#Assign 23 status into 4 attack class
+#Assign 23 status into 4 attack category
 
 for(i in 1:nrow(train)){
 if( (train[i,42]=="buffer_overflow.") | (train[i,42]=="rootkit.") | (train[i,42]=="loadmodule.") | (train[i,42]=="perl."))
@@ -23,6 +23,15 @@ train[i,43]="dos."
 else if( (train[i,42]=="normal.") )
 train[i,43]="normal."
 }
+
+train.u2r=train[train[,43]=="u2r.",]
+train.r21=train[train[,43]=="r21.",]
+train.probe=train[train[,43]=="probe.",]
+train.dos=train[train[,43]=="dos.",]
+train.normal=train[train[,43]=="normal.",]
+
+
+
 
 
 
