@@ -1,8 +1,10 @@
 #Preprocessing 
 
 train=read.csv("~/R/kdd99/kddcup.data_10_percent_corrected",header=FALSE)
+test=read.csv("~/R/kdd99/kddcup.newtestdata_10_percent_unlabeled",header=FALSE)
 header=read.csv("~/R/kdd99/colnames",header=FALSE)
 names(train)=header[,1]
+names(test)=header[,1]
 names(train)[42]="status"
 colnames(train)[43]="category"
 
@@ -31,10 +33,16 @@ train.probe=train[train[,43]=="probe.",]
 train.dos=train[train[,43]=="dos.",]
 train.normal=train[train[,43]=="normal.",]
 
-#
-library(leaps)
-u2r=train.u2r[,-43]
-regfit.best=regsubsets(status~.,data=u2r,nvmax=41,really.big=T)
+#logistics
+//library(leaps)
+//u2r=train.u2r[,-43]
+//regfit.best=regsubsets(status~.,data=u2r,nvmax=41,really.big=T)
+
+
+#KNN
+
+
+
 
 
 
