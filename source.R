@@ -2,9 +2,14 @@
 
 train=read.csv("~/R/kdd99/kddcup.data_10_percent_corrected",header=FALSE)
 test=read.csv("~/R/kdd99/kddcup.newtestdata_10_percent_unlabeled",header=FALSE)
-header=read.csv("~/R/kdd99/colnames",header=FALSE)
-names(train)=header[,1]
-names(test)=header[,1]
+colnames=read.csv("~/R/kdd99/colnames",header=FALSE)
+for(i in 1:nrow(header)){
+x[i]=sub(": continuous.","",colnames[i,1])
+header[i]=sub(": symbolic.","",x[i])
+}
+
+names(train)=header
+names(test)=header
 names(train)[42]="status"
 colnames(train)[43]="category"
 
