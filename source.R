@@ -40,6 +40,13 @@ train.normal=train[train[,43]=="normal.",]
 
 
 #KNN
+train.x=train[,-c(42,43)] //make train has 41 column as test
+knn.pred=knn(train.x,test,train[,42],k=5)
+table(knn.pred, train[,42])
+
+
+
+
 
 
 
