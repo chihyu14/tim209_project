@@ -1,11 +1,14 @@
 #Preprocessing 
-
+work=c(train,test)
 train=read.csv("~/R/kdd99/kddcup.data_10_percent_corrected",header=FALSE)
 test=read.csv("~/R/kdd99/kddcup.newtestdata_10_percent_unlabeled",header=FALSE)
 colnames=read.csv("~/R/kdd99/colnames",header=FALSE)
-for(i in 1:nrow(header)){
-x[i]=sub(": continuous.","",colnames[i,1])
-header[i]=sub(": symbolic.","",x[i])
+header=FALSE
+if(!header){
+for(i in 1:nrow(colnames)){
+header[i]=sub(": continuous.","",colnames[i,1])
+header[i]=sub(": symbolic.","",colnames[i,1])
+}
 }
 
 names(train)=header
