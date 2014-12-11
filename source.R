@@ -7,7 +7,7 @@ header=FALSE
 if(!header){
 for(i in 1:nrow(colnames)){
 x[i]=sub(": continuous.","",colnames[i,1])
-header[i]=sub(": symbolic.","",x[i,1])
+header[i]=sub(": symbolic.","",x[i])
 }
 }
 
