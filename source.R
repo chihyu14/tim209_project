@@ -51,7 +51,7 @@ train.normal=train[train[,43]=="normal.",]
 library(class)
 train.x=train[,-c(2,3,4,42,43)] //make train has 41 column same as test and strip out qualitative features
 test.x=test[,-c(2,3,4)]  //strip out qualitative features
-knn.pred=knn(train.x,test,train[,42],k=5)
+knn.pred=knn(train.x,test.x,train[,42],k=5)
 table(knn.pred, train[,42])
 
 
