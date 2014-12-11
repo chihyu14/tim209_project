@@ -6,8 +6,8 @@ colnames=read.csv("~/R/kdd99/colnames",header=FALSE)
 header=FALSE
 if(!header){
 for(i in 1:nrow(colnames)){
-header[i]=sub(": continuous.","",colnames[i,1])
-header[i]=sub(": symbolic.","",colnames[i,1])
+x[i]=sub(": continuous.","",colnames[i,1])
+header[i]=sub(": symbolic.","",x[i,1])
 }
 }
 
