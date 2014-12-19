@@ -69,6 +69,7 @@ test.x=test[select,]
 train.x=train[select,]
 status=as.factor(train.x[,42])
 svmfit=svm(status~.,data=train.x,kernel="radial",gamma=1,cost=1,scale=FALSE)
+tune.out=tune(svm,status~.,data=train.x,kernel="radial",ranges=list(cost=c(0.1,1,10,100,1000),gamma=c(0.5,1,2,3,4)))
 
 
 
