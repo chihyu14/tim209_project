@@ -1,0 +1,266 @@
+
+\documentclass[12pt]{article} % <--- Please use 12pt font
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage{enumerate,graphicx,hyperref,verbatim, amsmath, mathtools,pdfpages}
+
+% Please put your title here (not more than two lines)
+\title{Using Data Mining to Improve Intrusion Detection Systems}
+
+% List the name of the speaker/presenter and any coauthors here 
+% together with their affiliations
+\author{\textbf{Bruce Hsu, Erik Steggall}\\ esteggall@soe.ucsc.edu, chihyu.hsu1114@gmail.com}
+
+
+\date{} % <--- Please leave date empty
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+Computer security is a field in computer science that faces constant change. The adversarial nature of computer offense and defense leads to an ongoing evolution of techniques invented for both offensive and defensive purposes. Intrusion detection systems have emerged as a process of this evolution, their purpose being to detect attacks on their host system and to alert the system's administrator when an attack is found.\\
+One of the biggest challenges with designing an intrusion detection system is to create a system that is capable of properly analyzing the behaviors of the system in order to detect attacks, while not increasing the load on the system too prohibitively. Traditionally, string matching algorithms are used for this purpose. One such example is the Aho-Corrasick algorithm which is used to match certain signatures of known attacks in an efficient manner \cite{tuck04}.\\
+While these algorithms are very effective at what they do, they fail in that they are unable to generalize to an extent in which they can detect new, or previously unknown attacks. This is the main problem though, as most successful attacks that threaten computing systems are successful because they have not yet been identified by the computer security community yet. An interesting note is that most attacks that are currently in use have quite a bit in common with older attacks that may have been patched on most systems. These attacks evolve as patches are created to stop them, ultimately forming ``families'' of attacks which all have at the root a common ancestor.\\ 
+These families of attack naturally exhibit similarities to one another, which is where data mining comes into play. The general theory behind data mining is that we can use past observations in order to accurately predict future events. If this theory can be properly applied to current intrusion detection systems they would see substantial improvement in their abilities to detect and mitigate attacks.\\
+
+
+\section{Intrusion Detection Systems}
+The goal of an intrusion detection system is twofold. First, is must be capable of detecting any types of attack that are mounted on the host system, second, it must alert the system administrator in the event that an attack is occurring. Though this process seems simple, it is very complicated to properly implement. This is due to the high cost of mis-predicting.\\
+It is expensive to predict an attack is occurring when it is not, because it takes a costly system administrators time to manually address the issue and determine whether the alert was correct or not. Conversely, if an intrusion detection system is set so that it does not generate any false alarms it runs the risk of mis-classifying attacks as legitimate traffic which means that the system is vulnerable to attacks. An intrusion detection system that mis-classifies real attacks is worse than not having an intrusion detection system all together because it gives the system administrator a false sense of confidence whereas without one they may be more vigilant of attacks progressing.\\
+There are two main subcategories of intrusion detection system which are split by the ways in which they detect attacks. The first is a misuse detection system, this type of system uses a set of rules to detect attacks. The second is an anomaly detection system, which performs statistical analysis on the system's behaviors in order to detect anomalous behavior, which is highly indicative of an attack. Both of these systems will be described in full detail in the following sections.\\
+
+\noindent
+\subsection{Misuse detection}
+This section describes the traditional approach to misuse detection systems without the use of data mining, though data mining techniques can certainly be applied to the misuse detection which is explained later in the paper.\\ The process of misuse detection involves matching the signatures of known attacks against events currently taking place on the system. When a series of events is matched to one of the known attacks stored in a database an alert is triggered and the corresponding procedures are initialized.\\
+This type of system is traditionally implemented using the Aho-Corrasick algorithm The Aho-Corrasick algorithm is a string matching algorithm that uses state machines to keep track of the current patterns occurring on the system \cite{tuck04}. The main benefit of using the Aho-Corrasick algorithm is that it is capable of matching certain attacks in types of ``families'', in which the attack signatures all share a common ancestor. The drawback of using string matching algorithms is that they are unable to generalize to new attacks, so even if the signature shares an overwhelming majority of features with other attacks in a class it will not trigger the alarm if the attack in question is not in the database.\\
+% Pros of misuse detection
+% cons of misuse detection
+\noindent
+\subsection{Anomaly detection}
+This section describes the traditional approach to anomaly detection without data mining techniques, the use of data mining techniques could potentially improve these systems considerably.\\ The process of anomaly detection involves statistically analyzing the host system to determine the differences between normal system behavior and anomalous behavior that likely indicated an attack is occurring. Anomaly detection is based on the fact that most observed attacks exhibit behavior that is very unlike any normal system behavior that occurs on a system for day to day use.\\
+Anomalous behavior is detected by statistically analyzing the status quo of a system, and from this information identifying behaviors that significantly deviate from the status quo. Anomaly detection can be implemented by simply calculating the mean and standard deviation of various features on the system and alerting the system administrator any time that a series of events deviate to far from the mean behaviors of the system. This method is easy to understand and implement, however, most anomaly detection systems have a more complicated approach.\\
+There are a few different models of anomaly detection. This first main style of anomaly detection uses the Markov process, in which the state transitions of events are analyzed in order to classify anomalous behavior versus normal behavior.\\
+Another form of anomaly detection is multivariate analysis, where correlations between different features and variables on a system are analyzed in an attempt to detect anomalies.\\
+A third style of anomaly detection is to focus solely on the timing of events on a system and generating an alert whenever suspicious activity is detected.\\
+
+\section{Data Mining and Intrusion Detection}
+Data mining techniques can be leveraged to take advantage of inherent similarities between known attacks and unknown or future attacks that may occur on a system. As has been previously described, most new attacks use the same mechanisms as other known attacks in order to get around a systems defenses. This creates ``families'' of attacks which all share common traits to one another. The data mining can thus be applied in order to detect new variants of old, or known attacks.\\
+Another useful feature of data mining with respect to intrusion detection is that it is capable of classifying known behavior. One common trait that all attacks share is that they create an abnormal stream of events on a system. As observed by Lee et al. in their study of host based intrusion detection:\\
+``When an intrusion actually occurs, the majority of adjacent system call sequences are abnormal; whereas the [normal] prediction errors tend to be isolated and sparse." \cite{lee97}. \\
+This finding is significant to data mining as we can use data mining in order to classify normal system behaviors, and as an extension also classify abnormal system behaviors which may indicate an attack.\\
+There are many data mining techniques that have been applied to intrusion detection, the most significant of which will be outlined later in this section. These techniques can be split into two main classes; supervised and unsupervised. The following sections will describe these two subsets of data mining in more detail.\\
+
+\subsection{Supervised Learning}
+Supervised learning is a task in which a certain label is predicted based on a set of input features. Supervised learning is defined involves a training process, in which the data mining technique is fed a set of feature vectors with known labels so that it can ``learn'' the proper labels to output. Once the technique has been ``trained'' it should be capable of generalizing to determine the labels that belong to new feature sets based off the examples it was fed in training set. Some notable supervised learning techniques used for intrusion detection are; kNN, decision trees, neural networks, and support vector machines.\\
+
+\subsection{Unsupervised Learning}
+To contrast supervised learning we have unsupervised learning techniques. These techniques do not require any sort of ``ground truth'', which means they are capable of predicting labels without ever being trained on known examples. Unsupervised learning techniques are favorable to the application of intrusion detection as for various reasons it is hard to find proper datasets in order to train an algorithm.\\
+
+\subsection{Data Mining Techniques}
+There have been a number of different techniques that have been applied to intrusion detection. According to Tsai et al. the two most popular techniques tested by the research community are SVMs and kNN \cite{tsai09}. The following techniques are the most popular techniques and have each been extensively researched for their application to intrusion detection.\\
+ 
+\noindent
+\textbf{Decision Trees}\\
+Decision trees are based on rules that divide the input feature vector in order to classify it. This method builds a tree with each rule as a node which further separates the features. The building of a decision tree requires training, the process takes a top-down greedy approach and makes the most divisive splits depending on the feature set. This approach is very simple but very effective for intrusion detection.\\
+
+\noindent
+\textbf{k-Nearest Neighbor}\\
+k-Nearest Neighbor is another simple technique that is extremely effective for detecting intrusions. kNN classifies points by taking the euclidian distance from a target point, to a number of the nearest points to the target points. The $k$ value varies for different cases, having a higher $k$ will result in a higher bias and a lower variance.\\
+This algorithm is effective for intrusion detection because it naturally clusters normal behavior and abnormal behavior. This means that kNN will classify most normal behavior in certain clusters, and abnormal or attack behaviors will be contained in separate clusters.\\
+
+
+\noindent
+\textbf{k-Means Clustering}\\
+k-Means clustering is a technique that is designed specifically to cluster data points. This technique creates clusters similar to those of kNN, but it's mechanism for creating these clusters is different. k-Means clustering works by picking a number of k center points, where k is defined by the user. The algorithm then finds optimal positions for these center points by calculating the coverage of points that each center points has, as well as it's ``closeness'' to the center of each clump of points.\\
+k-Means clustering is effective for intrusion detection for the same reason that kNN is; it is able to cluster most normal behavior patterns together, and creates separate clusters for abnormal behaviors that likely signify attacks.\\
+
+\noindent
+\textbf{Support Vector Machines}\\
+Support vector machines are one of the most effective techniques available for data mining. SVMs are powerful because they are capable of creating a flexible separating boundary for a set of data points. SVMs create this separating boundary by mapping the input vector into a higher dimension space, and calculating the optimal hyperplane that separates the data points in the higher dimensional space.\\
+Another desirable feature of support vector machines is that they have the concept of a penalty that allows for a tradeoff between misclassified points, and the width of the separating boundary that is created.\\
+Support Vector Machines work well for detecting attacks because they are capable of creating a non-linear boundary that separates normal behaviors from abnormal behaviors.\\
+
+
+\noindent
+\textbf{Artificial Neural Networks}\\
+Artificial neural networks are another very powerful technique in the general field of data mining. Artificial neural networks perform very complex calcualtions using a series of nodes. Each of these nodes is interconnected and performs a smaller calculation, the connections between nodes allow for distributed calculations to be processed by these networks which can be used to classify datapoints.\\
+The first layer of nodes takes in the input vector, where each node does a specific calculation on a particular feature and then passes on the information to the next layer of nodes. The next layer makes calculations similar to those seen in the first layer, and will pass on it's output to the following layer. There are a number of inner layers that make subsequent calculations, and at the end the final layer of nodes produce an output that can be used for classification of new points.\\
+Artificial neural networks are capable of detecting attacks because they are capable of performing complex calculations that take all features into account.\\
+
+\noindent
+\textbf{Naive Bayes Network}\\
+Naive Bayes networks create a network of nodes that are based on conditional probablilities. A Naive Bayes network is a directed acyclic graph based on a system's behavior. Each node in this graph represents a system variable, these nodes are connected together by edges that represent causal relationships between these system variables. Naive Bayes networks take advantage of statistical dependences and causal relationships of certain features and behaviors in order to separate out datapoints. A Naive Bayes network can thus determine if a certain series of behaviors is conditionally improbable, which signifies that an attack is taking place.\\
+
+\noindent
+\textbf{Genetic Algorithms}\\
+Genetic algorithms are techniques that borrow concepts from evolution in order to generate results. A genetic algorithm will consider a feature vector as a ``gene''. It will combine a series of feature sets which represent a ``chromosome''. The core functioning of a genetic algorithm involves initializing a number of chromosomes and creating new chromosomes by combining different pairings of genes from the initial chromosome set.\\
+The algorithm will then select the chromosomes that satisfy the constraints best, and run another round using these chromosomes in the same manner that the initial chromosomes were used. A number of rounds are run, and each round the result get optimized.\\
+Genetic algorithms are work well for intrusion detection because eventually a certain number of these chromosomes mutate to represent ``niches'' in the environment. This is another ecological term that is borrowed from biology, but essentially it means that there will be chromosomes to represent various behaviors, and these ``nitch'' chromosomes usually represent anomalous or attack like behaviors.\\
+
+\subsection{Combining techniques}
+\noindent
+\textbf{Hybrid Classifiers}\\
+A hybrid classifier uses two or more data mining techniques in order to build a more robust classifier than either of the separate techniques. A hybrid technique runs a number of techniques in series in order to create a stronger classification. To discribe more fully; the first technique will take the input vector as input, process the input, and then submit an output which will then be used as the input to a second technique. A number of intermediary techniques can be used to strengthen the final result. Using a number of complementary techniques to create a hybrid classifier has proved to be very effective\cite{tsai09}.\\
+
+\noindent
+\textbf{Ensemble Classifiers}\\
+Creating an ensemble classifier is another method that utilizes the strengths of two or more algorithms while minimizing the weakness of each. An ensemble classifier combine the results from two or more techniques to create a ``majority vote'' in which the most common result is picked as the final result. Weights can be added to the outputs of techniques in certain scenarios where the technique is known to predict either strongly or weakly in order to increase the accuracy of the ensemble classifier overall.\\
+This works well for intrusion detection because of the high risk of false positives and false negatives makes the cost of misclassification prohibitive. In combining a number of techniques we can be more assured that our results are accurate when all techniques agree and may be more wary when they do not.\\
+
+
+
+\section{The KDD dataset}
+The '99 KDD network intrusion dataset is the only publicly available dataset that is designed to test intrusion detection system. This section goes over the details of the dataset, along with some of the problems associated with it.\\
+The KDD dataset is a refined version of the 1998 DARPA Intrusion Detection System Evaluation dataset, which was created by Lincoln Labs. This dataset was artificially created and it was intended to simulate normal traffic behavior that would be seen in a medium sized US Air Force base\cite{mukkamala02}. Most of the traffic in this dataset is synthetically generated and is intended to imitate normal traffic behaviors seen in an Air Force base network. There are a number of artificially injected attacks that are added to the dataset that represent potential attacks that may occur in the real world.\\
+The KDD dataset uses a total of five million records for the training set and three hundred thousand record for the testing set \cite{sabhnani04}. These records were taken from the original '98 DARPA dataset. The KDD dataset contains a number of different classes of attack; Denial of Service (DoS) attacks, Scanning or probing attacks, Remote-to-local attacks (R2L), and User-to-Root attacks (U2R). The entire dataset, both the training and the testing sets, includes thirty six different attack types which each classify into one of the four main subcategories of attack. \\
+ Each of these attacks are injected into the traffic stream at various intervals. The distribution of these attacks raises the first of the problems with this dataset: The number of U2R and R2L attacks in the testing dataset is far greater than those seen in the training set. According to Sabhnani et al. the training dataset contained 1126 R2L records and only 52 records for U2R attacks while the testing dataset contained 228 U2R records and 16,189 R2L records\cite{sabhnani04}. This means that 80\% of all U2R records and 60\% of all R2L records only exist in the testing dataset. This causes problems with the training of algorithms which are trained around only a small subset of the existing attacks, which makes it very difficult for them to generalize to this great increase in the diversity of known attacks. As a result, many of the studies done on the KDD have poor performance for both U2R and R2L.\\
+
+
+
+\section{Problems with Data Mining and Intrusion Detection}
+There has been a significant effort among the research community to develop and refine data mining techniques to aid in the intrusion detection process. Unfortunately, these techniques have not seen widespread adoption in practice. This section will address a few of the reasons that machine learning techniques have not been applied in practice.\\
+There is a fundamental difficulty with applying data mining techniques to intrusion detection. This difficulty is rooted in the high costs for both false positive and false negative mis-predictions which is uncommon for most other applications \cite{paxon10}. In most applications, either false positives or false negatives will have a prohibitive cost, but the solution is to simply adjust the threshold to mitigate these costs.\\
+For example, with spam detection is an application with similar goals to intrusion detection. The cost of predicting an email is spam when it is a normal mail is incredibly high, however the cost of predicting normal mail when the email is actually spam has little cost at all. As a result, to mitigate the cost of falsely predicting an email is spam, we set the threshold higher so that we allow a few more spam emails through at the cost of never misclassifying real email.\\
+For intrusion detection, a mis-prediction of normal traffic as an attack literally costs money, as it takes an analysts time to examine the situation in order to determine if an attack has indeed occurred. Conversely, mis-predicting an attack means that our intrusion detection system has failed and the network has been compromised. This is worse than not having an intrusion detection system in the first place since our IDS will give the administrator a false sense of confidence in their level of protection so they may take longer to identify the attack.\\
+The last problem can be expanded into a new problem which is that it is hard to create data mining techniques that provide an intuitive output that can be used by a system administrator. For every alert that is generated, a system administrator will have to determine if the alert is actually an attack, or if it s merely a false positive \cite{paxon10}.\\
+Another related issue is that it is hard to semantically define the differences between an attack and normal network behavior as each computing system will have different goals and different definitions of attack. For instance, in some companies sending internal files outside the network can be considered as an attack, while other networks this would be a perfectly reasonable behavior. This means that creating a dataset to train on all scenarios is very difficult, thus creating a general dataset is near impossible \cite{paxon10}.\\
+A last major problem with applying data mining to machine learning is the difficulty in creating or accessing data sets in order to perform research. This problem is partly addressed in the KDD dataset portion of this paper. The KDD data set provides a good example in that even a well funded effort can fail to create a viable dataset to be used. This difficulty stems from the extreme difficulty of accurately labeling attacks, as well as the challenges faced in creating synthetic traffic.\\
+A solution would be to use datasets generated by real-world computing systems, but this is infeasible for most purposes as it is incredibly difficult to properly scrub a dataset so that it does not leak any private information, while maintaing workable features that can be used to learn on.\\
+
+\pagebreak
+
+\section{Results}
+We ran a subset of the most popular techniques we could find using the $R$ programming language. The techniques we picked were kNN, decision trees, support vector machines and k-Means clustering. We picked these techniques because they were among the top performers in other studies that we read. Our results are as follows:\\
+We found that the top two performers were k-Means and kNN. The results, shown in table 1, show that k-Means has the top performance with $k = 10$, but kNN has the top performance overall. k-Means was able to generate results with 99.4\% accuracy with $k = 10$, while kNN fell close behind with with $k = 50$ and $k = 100$ both producing results with 97.787\% accuracy.\\ 
+The next best is our implementation of decision which fell close behind kNN a score of 97.738\% accuracy. \\
+k-Means did not do as well as we had initially thought it would with lower values of $k$, however substantial improvement is seen as k is increased. The starting error rate of k-means with just two clusters generates results with 58.5\% accuracy. This improves to 93.7\% with $k = 5$, which makes sense as there are five main categories; normal traffic, DoS attacks, probing attacks, R2L attacks, and U2R attacks. This score reached a maximum at $k = 10$ which recieved a 99.4\% accuracy rate.\\
+Another interesting result is that our implementation of SVM's did not perform as well as the reported results from other studies. We received a total accuracy of 90.467\% from our implementation of Support Vector Machines.\\
+\begin{table*}[!htbp]
+\begin{center}
+\caption{The accuracy rate of the techniques we applied. Accuracy percentage was calculated by 100 - error rate.}
+\begin{tabular}{ | c | c |}
+\hline
+& Accuracy Percentage \\
+\hline
+kNN k = 1 & 97.757\% \\
+kNN k = 5 & 97.778\% \\
+kNN k = 10 & 97.778\% \\
+kNN k = 50 & 97.787\% \\
+kNN k = 100 & 97.787\% \\
+\hline
+k-Means k = 2 & 58.5\% \\
+k-Means k = 3 & 81.7\% \\
+k-Means k = 4 & 89.2\% \\
+k-Means k = 5 & 93.7\% \\
+k-Means k = 10 & 99.4\% \\
+\hline
+Decision Trees & 97.738\% \\
+\hline
+Support Vector Machines & 90.467\% \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+\pagebreak
+
+\section{Related Work}
+A number of other studies have been done on the KDD dataset. This section will go over the results from a few of these studies to compare to our results. Findings from Laskov et al. confirm this claim, as they found SVMs to be the top performing technique, followed by kNN. Further work done by Sabhani et al. \cite{sabhanai03} \cite{sabhnani04} on the KDD dataset report that the best performing techniques were; SVMs, decision trees, k-Means clustering, and neural networks to be the top performers.\\
+The study by Sabhnani et al. found that most techniques performed very well on the DoS and probing attacks, but poorly on the R2L and U2R attacks, the reasons for this are discussed in the KDD dataset section of this paper. Sabhnani's research found that SVMs were the best at predicting probing attacks, with a 93.2\% detection rate and an 18.8\% false positive rate. For DoS attacks they found that k-Means clustering and neural networks both performed equally; k-Means scored 97.3\% accuracy on their detection rate and neural networks scored 93.4\%\cite{sabhanai03}. Both of these had minimal false positive rates, with 0.3\% for k-Means and 0.4\% for neural networks.\\
+The performance for U2R and R2L attacks drops off significantly, with a 29.8\% detection accuracy scored by k-Means for U2R and no algorithm scoring above 10\% accuracy for R2L.\\
+A second study by Subhnani et al. combined the testing and training datasets and utilized cross validation in order to re-examine the U2R and R2L attacks. This study produced much more favorable results: Decision trees, which initially received a 0.18\% detection rate for U2R jumped up to 87.5\% detection. The initial results for decision trees on R2L was 0.46\% which jumped to 99.18\% when cross validation was applied. This is a testament to the strengths of using cross validation for data mining.\\
+Another study done on the KDD dataset by Mukkamala et al. examined Support Vector Machines and Neural Networks. This study found that both support vectors and neural networks performed extremely well with both scoring over 99\% prediction accuracy overall.\\
+\section{Conclusion}
+The intrusion detection has much to gain in utilizing techniques developed by the data mining community. Unfortunately, due to a number of difficulties with merging data mining and intrusion detecting, there is a large gap between research and actual application of data mining techniques in practice.\\
+This gap is a result of the fundamental differences between intrusion detection and other applications of data mining, as well as difficulties in creating viable data sets used to test techniques. Data mining techniques are difficult to apply to intrusion detection in practice because of the incredibly precise outputs required for proper detection. This is because intrusion detection, unlike most other applications that use data mining, has a high cost for both false positives and false negatives. The second reason that data mining has not be widely adopted in practice is the difficultly in creating a proper dataset. This is due to a number of reasons; it is hard to simulate normal traffic behavior, it is hard to properly label attacks versus normal behavior, and it is hard to find an existing network to create a dataset because of the privacy requirements of all networks.\\
+We attempt to address the above problems by creating a system that will learn attacks ``online'' by using the help of the system administrator to identify known attacks. We did not get to fully implement our ideas, thus this paper only covers a subset of the problem. Our future plans are described more fully in the Future work section.\\
+For this paper we analyzed four of the most popular data mining techniques used for intrusion detection; kNN, decision trees, k-Means clustering, and Support Vector Machines. We found the best performer was kNN with a $k$ greater than 50, which create results with 97.78\% accuracy. kNN is closely followed by decision trees, our implementation of decision trees scored 97.738\% accuracy.\\
+k-Means clustering saw drastic improvements with the increase of $k$. With only two clusters k-Means clustering scored a dismal 58.5\% accuracy. Increasing the value of $k$ to 5 increased our accuracy to 93.7\%.\\
+Interestingly, we were unable to get the accuracy from Support Vector Machines that was reported by other studies. Our implementation of Support Vector Machines had 90.46\% prediction accuracy, which is not terrible, but we had anticipated this to be our top performing technique and it was not.\\
+We found that our results were very close to the results of other studies. We hope to continue our work on this project, which will be described further in the Future Work section.\\
+
+\section{Future Work}
+The original aim of this project was to create an ensemble classifier that is capable of classifying network traffic in real time. Unfortunately, due to the time constraints of the quarter system at UCSC this work will have to be completed in the future.\\
+Currently our system comprises of a daemon written in C that calls a UNIX \textit{tcpdump} command and our R script every five seconds. The daemon's call to \textit{tcpdump} will collect traffic, and it's subsequent call to the R script will process the traffic in order to detect attacks.\\
+The final design is intended to be similar to the CLARAty system as described by Pietrazek et al. \cite{pietraszek05} which is an online classifier that takes the system administrators input in classifying attacks. This type of system would be powerful because it would be able to train ``online'' with the input of the system administrator.\\
+At the time this paper is written the project is in two pieces. We have a $C$ daemon that calls \textit{tcpdump} to collect traffic, and an R script that is capable of analyzing the traffic. Unfortunately it is harder than originally though to combine these two pieces and additionally take in the user input.\\
+We hope to continue this project in the future. We'll let you know how it goes!\\
+\begin{thebibliography}{1}
+
+\bibitem{verwoerd99}
+  Theuns Verwoerd, Ray Hunt,
+  \emph{Intrusion Detection Techniques and Approaches}.
+  University of Canterbury, New Zealand,
+  1999.
+
+\bibitem{tsai09}
+  Chih-Fong Tsai, Yu-Feng Hsu, Chia-Ying Lin, Wei-Yang Lin
+  \emph{Intrusion detection by machine learning: A review}
+  National Central University, Taiwan
+  2009
+  
+\bibitem{laskov05}
+  Pavel Laskov, Patrick Dussel, Christin Schafer, and Konrad Rieck
+  \emph{Learning Intrusion Detection: Supervised or Unsupervised}
+  Berlin, Germany
+  2005
+  
+\bibitem{pietraszek05}
+  Tadeusz Pietraszek, Axel Tanner
+  \emph{Data mining and machine learning: Towards reducing false positives in intrusion detection}
+  Ruschlikon, Switzerland
+  2005
+  
+\bibitem{sabhnani03}
+    Maheshkumar Sabhnani, Gursel Serpen
+    \emph{Application of Machine Learning Algorithms to
+KDD Intrusion Detection Dataset within Misuse Detection Context}
+    Toledo, Ohio
+    2003
+\bibitem{sabhnani04}
+  Maheshkumar Sabhnani, Gursel Serpen
+  \emph{Why Machine Learning Algorithms Fail in Misuse Detection
+on KDD Intrusion Detection Data Set}
+  Toledo, Ohio
+   2004
+   
+\bibitem{endler98}
+  David Endler
+  \emph{Intrusion Detection
+Applying Machine Learning to Solaris Audit Data}
+  New Orleans, LA
+  1998
+\bibitem{lee97}
+  Wenke Lee, Saivatore Stolfo, Philip Chan
+  \emph{Learning Patterns from Unix Process ExecutionTraces for Intrusion Detection}
+  New York, NY
+  1997
+\bibitem{paxon10}
+  Robin Sommer, Vern Paxson
+  \emph{Outside the Closed World:
+On Using Machine Learning For Network Intrusion Detection}
+  Berkeley, CA
+  2010
+  
+\bibitem{sinclair99}
+  Chris Sinclair, Lyn Pierce, Sara Matzner
+  \emph{An Application of Machine Learning to Network Intrusion Detection}
+  Austin, TX
+  1999
+  
+\bibitem{mukkamala02}
+  Srinivas Mukkamala, Guadalupe Janoski, Andrew Sung
+  \emph{Intrusion Detection Using Neural Networks and Support Vector Machines}
+  Socorro, NM
+  2002
+  
+\bibitem{tuck04} Tuck, N.; Sherwood, T. ; Calder, B. ; Varghese, G.;
+"Deterministic memory-efficient string matching algorithms for intrusion detection"
+
+\bibitem{stallings08}
+  William Stallings, Lawrence Brown
+  \emph{Computer Security: Principles and Practice}
+  2008
+
+\end{thebibliography}
+
+\end{document}
