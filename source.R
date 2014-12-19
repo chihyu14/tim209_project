@@ -7,7 +7,7 @@ header=FALSE
 if(!header){
 for(i in 1:nrow(colnames)){
 x[i]=sub(": continuous.","",colnames[i,1])
-header[i]=sub(": symbolic.","",x[i,1])
+header[i]=sub(": symbolic.","",x[i])
 }
 }
 
@@ -48,20 +48,29 @@ train.normal=train[train[,43]=="normal.",]
 
 
 #KNN
-train.x=train[,-c(42,43)] //make train has 41 column as test
-knn.pred=knn(train.x,test,train[,42],k=5)
+library(class)
+train.x=train[,-c(2,3,4,42,43)] //make train has 41 column same as test and strip out qualitative features
+test.x=test[,-c(2,3,4)]  //strip out qualitative features
+knn.pred=knn(train.x,test.x,train[,42],k=5)
 table(knn.pred, train[,42])
-
-
-
-
-
-
 
 
 # Decision trees
 attach(train)
 ids_tree <- tree(status ~ duration+flag+protocol_type+src_bytes+dst_bytes+land+wrong_fragment+urgent+hot+num_failed_logins+logged_in+num_compromised+root_shell+su_attempted+num_root+num_file_creations+num_shells+num_access_files+num_outbound_cmds+is_host_login+is_guest_login+count+srv_count+serror_rate+srv_serror_rate+rerror_rate+srv_rerror_rate+same_srv_rate+diff_srv_rate+srv_diff_host_rate+dst_host_count+dst_host_srv_count+dst_host_same_srv_rate+dst_host_diff_srv_rate+dst_host_same_src_port_rate+dst_host_srv_diff_host_rate+dst_host_serror_rate+dst_host_srv_serror_rate+dst_host_rerror_rate+dst_host_srv_rerror_rate, train)
+
+library(tree)
+train$service=as.integer(train$service) //convert service into numeric since its level over 32.
+ids_tree=tree(train$status~.,train)
+
+# SVM
+select=sample(nrow(test),10000)
+test.x=test[select,]
+train.x=train[select,]
+status=as.factor(train.x[,42])
+svmfit=svm(status~.,data=train.x,kernel="radial",gamma=1,cost=1,scale=FALSE)
+tune.out=tune(svm,status~.,data=train.x,kernel="radial",ranges=list(cost=c(0.1,1,10,100,1000),gamma=c(0.5,1,2,3,4)))
+
 
 
 
