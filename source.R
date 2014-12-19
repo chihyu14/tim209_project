@@ -63,6 +63,15 @@ library(tree)
 train$service=as.integer(train$service) //convert service into numeric since its level over 32.
 ids_tree=tree(train$status~.,train)
 
+# SVM
+select=sample(nrow(test),10000)
+test.x=test[select,]
+train.x=train[select,]
+status=as.factor(train.x[,42])
+svmfit=svm(status~.,data=train.x,kernel="radial",gamma=1,cost=1,scale=FALSE)
+
+
+
 
                       
 
